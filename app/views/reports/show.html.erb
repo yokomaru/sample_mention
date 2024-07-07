@@ -2,6 +2,33 @@
 
 <%= render @report %>
 
+<h1>Mentions</h1>
+
+<div id="mentions">
+  <% @report.mentioned_reports.each do |mention| %>
+    <p>
+      <%= Report.find(mention.mentioning_report_id).title %>
+    </p>
+    <p>
+      <% sabun =  Time.zone.now - Report.find(mention.mentioned_report_id).created_at  %>
+      <%= if sabun < 60 # 秒
+          "#{(sabun).floor} seconds ago"
+        elsif 60 < sabun && sabun < 3600 # 分
+          "#{(sabun / 60).floor} minutes ago"
+        elsif 3600 < sabun && sabun < 86400 # 時
+          "#{(sabun / 3600).floor} hour ago"
+        elsif 86400 < sabun && sabun < 2592000 # 日
+          "#{(sabun / 86400).floor} day ago"
+        elsif 2592000 < sabun && sabun < 31536000 # 月
+          "#{(sabun / 2592000).floor} month ago"
+        elsif sabun > 31360000 # 月
+          "#{(sabun / 31360000).floor} year ago"
+        end
+      %>
+    </p>
+  <% end %>
+</div>
+
 <div>
   <%= link_to "Edit this report", edit_report_path(@report) %> |
   <%= link_to "Back to reports", reports_path %>

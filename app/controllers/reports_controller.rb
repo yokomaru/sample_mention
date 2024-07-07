@@ -21,8 +21,12 @@ class ReportsController < ApplicationController
 
   # POST /reports or /reports.json
   def create
+    #Mention.new(mention_params)
     @report = Report.new(report_params)
-
+    # binding.break
+    # [2, 3].each do
+    #   @report.authors.build
+    # end
     respond_to do |format|
       if @report.save
         format.html { redirect_to report_url(@report), notice: "Report was successfully created." }
@@ -65,6 +69,6 @@ class ReportsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def report_params
-      params.require(:report).permit(:title, :content)
+      params.require(:report).permit(:title, :content, )
     end
 end

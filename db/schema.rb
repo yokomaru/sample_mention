@@ -17,6 +17,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_07_094108) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["mentioned_report_id"], name: "index_mentions_on_mentioned_report_id"
+    t.index ["mentioning_report_id", "mentioned_report_id"], name: "index_mentions_on_mentioning_report_id_and_mentioned_report_id", unique: true
     t.index ["mentioning_report_id"], name: "index_mentions_on_mentioning_report_id"
   end
 
