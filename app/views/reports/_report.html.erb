@@ -6,7 +6,7 @@
 
   <p>
     <strong>Content:</strong>
-    <%= report.content %>
+    <%= auto_link(simple_format(h(report.content)), :link => :urls) %>
   </p>
 
 </div>
