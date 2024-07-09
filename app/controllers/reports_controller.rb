@@ -8,6 +8,9 @@ class ReportsController < ApplicationController
 
   # GET /reports/1 or /reports/1.json
   def show
+    #binding.break
+    #@report.mentioned_report_relationships.build(report_id: Report.find(3).id)
+    #@report.save!
   end
 
   # GET /reports/new
@@ -28,11 +31,12 @@ class ReportsController < ApplicationController
     #   @report.authors.build
     # end
     respond_to do |format|
-      if @report.save
+      if @report.do_transaction
         format.html { redirect_to report_url(@report), notice: "Report was successfully created." }
         format.json { render :show, status: :created, location: @report }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        #binding.break
+        format.html { render :new, status: :unprocessable_entity, alert: "失敗" }
         format.json { render json: @report.errors, status: :unprocessable_entity }
       end
     end
@@ -41,7 +45,7 @@ class ReportsController < ApplicationController
   # PATCH/PUT /reports/1 or /reports/1.json
   def update
     respond_to do |format|
-      if @report.update(report_params)
+      if @report.do_transaction_update(report_params)
         format.html { redirect_to report_url(@report), notice: "Report was successfully updated." }
         format.json { render :show, status: :ok, location: @report }
       else

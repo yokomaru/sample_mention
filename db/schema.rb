@@ -12,13 +12,13 @@
 
 ActiveRecord::Schema[7.1].define(version: 2024_07_07_094108) do
   create_table "mentions", force: :cascade do |t|
-    t.integer "mentioning_report_id", null: false
-    t.integer "mentioned_report_id", null: false
+    t.integer "report_id"
+    t.integer "mentioned_report_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["mentioned_report_id"], name: "index_mentions_on_mentioned_report_id"
-    t.index ["mentioning_report_id", "mentioned_report_id"], name: "index_mentions_on_mentioning_report_id_and_mentioned_report_id", unique: true
-    t.index ["mentioning_report_id"], name: "index_mentions_on_mentioning_report_id"
+    t.index ["report_id", "mentioned_report_id"], name: "index_mentions_on_report_id_and_mentioned_report_id", unique: true
+    t.index ["report_id"], name: "index_mentions_on_report_id"
   end
 
   create_table "reports", force: :cascade do |t|
@@ -28,6 +28,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_07_094108) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "mentions", "reports"
   add_foreign_key "mentions", "reports", column: "mentioned_report_id"
-  add_foreign_key "mentions", "reports", column: "mentioning_report_id"
 end

@@ -65,6 +65,6 @@ class MentionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def mention_params
-      params.require(:mention).permit(:mentioning_report_id, :mentioned_report_id)
+      params.require(:mention).permit(:report_id, :mentioned_report_id)
     end
 end

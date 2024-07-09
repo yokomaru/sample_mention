@@ -5,12 +5,12 @@
 <h1>Mentions</h1>
 
 <div id="mentions">
-  <% @report.mentioned_reports.each do |mention| %>
+  <% @report.mentionners.each do |report| %>
     <p>
-      <%= Report.find(mention.mentioning_report_id).title %>
+      <%= report.title %>
     </p>
     <p>
-      <% sabun =  Time.zone.now - Report.find(mention.mentioned_report_id).created_at  %>
+      <% sabun =  Time.zone.now - report.created_at  %>
       <%= if sabun < 60 # 秒
           "#{(sabun).floor} seconds ago"
         elsif 60 < sabun && sabun < 3600 # 分
