@@ -8,9 +8,6 @@ class ReportsController < ApplicationController
 
   # GET /reports/1 or /reports/1.json
   def show
-    #binding.break
-    #@report.mentioned_report_relationships.build(report_id: Report.find(3).id)
-    #@report.save!
   end
 
   # GET /reports/new
@@ -24,14 +21,9 @@ class ReportsController < ApplicationController
 
   # POST /reports or /reports.json
   def create
-    #Mention.new(mention_params)
     @report = Report.new(report_params)
-    # binding.break
-    # [2, 3].each do
-    #   @report.authors.build
-    # end
     respond_to do |format|
-      if @report.do_transaction
+      if @report.save_with_mentions
         format.html { redirect_to report_url(@report), notice: "Report was successfully created." }
         format.json { render :show, status: :created, location: @report }
       else
@@ -45,7 +37,7 @@ class ReportsController < ApplicationController
   # PATCH/PUT /reports/1 or /reports/1.json
   def update
     respond_to do |format|
-      if @report.do_transaction_update(report_params)
+      if @report.update_with_mentions(report_params)
         format.html { redirect_to report_url(@report), notice: "Report was successfully updated." }
         format.json { render :show, status: :ok, location: @report }
       else

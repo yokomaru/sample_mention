@@ -5,7 +5,7 @@ class Report < ApplicationRecord
   has_many :mentionings, through: :mentioning_reports, source: :mentioned_report
   has_many :mentionners, through: :mentioned_reports, source: :report
 
-  def do_transaction
+  def save_with_mentions
     Report.transaction do
       save!
       self.mentioning_ids = get_uris(content)
@@ -16,28 +16,25 @@ class Report < ApplicationRecord
       return false
   end
 
-  def do_transaction_update(params)
+  def update_with_mentions(params)
     Report.transaction do
       update!(params)
-
       self.mentioning_ids = get_uris(content)
-      #raise ActiveRecord::RecordInvalid
     end
       return true
     rescue ActiveRecord::RecordInvalid => invalid
-      errors.add(:report, "の保存に失敗しました")
+      errors.add(:report, "の更新に失敗しました")
       return false
   end
 
+  private
+
   def get_uris(content)
-    array = URI.extract(content)
-    p array
-    newa = array.map do |a|
+    newa = URI.extract(content).map do |a|
       u = URI.parse(a)
       pa = u.path.split('/')[2].to_i if u.path.match?(/^\/reports\/(\d+)(\/|$)/)
       pa if Report.exists?(pa)
     end
-    p newa.compact.uniq
     newa.compact.uniq
   end
 end
