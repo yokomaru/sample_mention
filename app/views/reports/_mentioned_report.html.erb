@@ -1,0 +1,6 @@
+<div id="<%= dom_id report %>">
+    <p>
+      <%= link_to report.title, report_path(report.id), target: :_blank, rel: "noopener noreferrer" %>
+      <%= display_time_difference_between_now_and_created_at(report.created_at)%>
+    </p>
+</div>

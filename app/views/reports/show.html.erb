@@ -5,12 +5,8 @@
 <h1>この日報は以下の日報からリンクされています</h1>
 
 <div id="mentions">
-  <% @report.mentionners.each do |report| %>
-    <p>
-      <%= link_to report.title, report_path(report.id), target: :_blank, rel: "noopener noreferrer" %>
-      <%= display_time_difference_between_now_and_created_at(report.created_at)%>
-      <% time_difference =  Time.zone.now - report.created_at  %>
-    </p>
+  <% @report.mentioned_reports.each do |report| %>
+    <%= render 'mentioned_report', report: report %>
   <% end %>
 </div>
 

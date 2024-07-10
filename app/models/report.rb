@@ -1,17 +1,9 @@
 class Report < ApplicationRecord
   # has_many :mentions
-  has_many :mentioning_reports, class_name: "Mention", foreign_key: "report_id",  dependent: :destroy # (mentioning_report)
-  has_many :mentioned_reports, class_name: "Mention", foreign_key: "mentioned_report_id",  dependent: :destroy # (mentioning_report)
-  has_many :mentionings, through: :mentioning_reports, source: :mentioned_report
-  has_many :mentionners, through: :mentioned_reports, source: :report
-
-
-  # after_save :save_mention
-  # def save_mention
-  #   self.mentioning_ids = get_uris(content)
-  #   #followed.microposts.create!(content: "#{follower.name}があなたをフォローしました。")
-  # end
-
+  has_many :mentioning_relations, class_name: "Mention", foreign_key: "report_id",  dependent: :destroy # (mentioning_report)
+  has_many :mentionned_relations, class_name: "Mention", foreign_key: "mentioned_report_id",  dependent: :destroy # (mentioning_report)
+  has_many :mentioning_reports, through: :mentioning_relations, source: :mentioned_report
+  has_many :mentioned_reports, through: :mentionned_relations, source: :report
 
   def save_with_mentions
     Report.transaction do
