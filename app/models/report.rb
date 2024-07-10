@@ -10,7 +10,6 @@ class Report < ApplicationRecord
       save!
       self.mentioning_ids = fetch_report_ids(content)
     end
-      true
     rescue ActiveRecord::RecordInvalid => invalid
       logger.error invalid.message
       logger.error invalid.backtrace.join("\n")
