@@ -6,7 +6,8 @@
 
   <p>
     <strong>Content:</strong>
-    <%= auto_link(simple_format(h(report.content)), :link => :urls) %>
+    <%#= auto_link(simple_format(h(report.content)), link: :urls, html: { target: '_blank', rel: 'noopener noreferrer' }) %>
+    <%= raw Rinku.auto_link(simple_format(h(report.content)), :urls, 'target="_blank" rel="noopener noreferrer"',nil, Rinku::AUTOLINK_SHORT_DOMAINS) %>
   </p>
 
 </div>

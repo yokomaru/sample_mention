@@ -5,36 +5,48 @@ class Report < ApplicationRecord
   has_many :mentionings, through: :mentioning_reports, source: :mentioned_report
   has_many :mentionners, through: :mentioned_reports, source: :report
 
+
+  # after_save :save_mention
+  # def save_mention
+  #   self.mentioning_ids = get_uris(content)
+  #   #followed.microposts.create!(content: "#{follower.name}があなたをフォローしました。")
+  # end
+
+
   def save_with_mentions
     Report.transaction do
       save!
-      self.mentioning_ids = get_uris(content)
+      self.mentioning_ids = fetch_report_ids(content)
     end
-      return true
+      true
     rescue ActiveRecord::RecordInvalid => invalid
+      logger.error invalid.message
+      logger.error invalid.backtrace.join("\n")
       errors.add(:report, "の保存に失敗しました")
-      return false
+      false
   end
 
   def update_with_mentions(params)
     Report.transaction do
       update!(params)
-      self.mentioning_ids = get_uris(content)
+      self.mentioning_ids = fetch_report_ids(content)
     end
-      return true
     rescue ActiveRecord::RecordInvalid => invalid
+      logger.error invalid.message
+      logger.error invalid.backtrace.join("\n")
       errors.add(:report, "の更新に失敗しました")
-      return false
+      false
   end
 
   private
 
-  def get_uris(content)
-    newa = URI.extract(content).map do |a|
-      u = URI.parse(a)
-      pa = u.path.split('/')[2].to_i if u.path.match?(/^\/reports\/(\d+)(\/|$)/)
-      pa if Report.exists?(pa)
+  def fetch_report_ids(content)
+    registered_report_ids = Report.all.ids
+    report_ids = URI.extract(content).map do |url|
+      matched_report = url.match(/http\:\/\/localhost\:3000\/reports\/(\d+)(\/|$)/)
+      report_id = matched_report[1].to_i if matched_report.present?
+      report_id if registered_report_ids.include?(report_id)
     end
-    newa.compact.uniq
+    report_ids.compact.uniq
   end
 end

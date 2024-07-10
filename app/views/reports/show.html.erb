@@ -2,29 +2,14 @@
 
 <%= render @report %>
 
-<h1>Mentions</h1>
+<h1>この日報は以下の日報からリンクされています</h1>
 
 <div id="mentions">
   <% @report.mentionners.each do |report| %>
     <p>
-      <%= report.title %>
-    </p>
-    <p>
-      <% sabun =  Time.zone.now - report.created_at  %>
-      <%= if sabun < 60 # 秒
-          "#{(sabun).floor} seconds ago"
-        elsif 60 < sabun && sabun < 3600 # 分
-          "#{(sabun / 60).floor} minutes ago"
-        elsif 3600 < sabun && sabun < 86400 # 時
-          "#{(sabun / 3600).floor} hour ago"
-        elsif 86400 < sabun && sabun < 2592000 # 日
-          "#{(sabun / 86400).floor} day ago"
-        elsif 2592000 < sabun && sabun < 31536000 # 月
-          "#{(sabun / 2592000).floor} month ago"
-        elsif sabun > 31360000 # 月
-          "#{(sabun / 31360000).floor} year ago"
-        end
-      %>
+      <%= link_to report.title, report_path(report.id), target: :_blank, rel: "noopener noreferrer" %>
+      <%= display_time_difference_between_now_and_created_at(report.created_at)%>
+      <% time_difference =  Time.zone.now - report.created_at  %>
     </p>
   <% end %>
 </div>
